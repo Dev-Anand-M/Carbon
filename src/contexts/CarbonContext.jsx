@@ -6,6 +6,7 @@
  */
 
 import { createContext, useContext, useReducer, useCallback, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { getStoredData, setStoredData } from '../services/storageService.js';
 import { STORAGE_KEYS } from '../utils/constants.js';
 import { calculateTotalFootprint } from '../utils/carbonCalculations.js';
@@ -306,5 +307,9 @@ function checkAchievements(state, dispatch) {
     }
   });
 }
+
+CarbonProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default CarbonContext;

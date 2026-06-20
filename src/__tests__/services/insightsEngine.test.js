@@ -2,7 +2,7 @@
  * @fileoverview Unit tests for the insights engine.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   generateInsights,
   calculateCompletedImpact,
@@ -105,5 +105,27 @@ describe('getContextualTip', () => {
     expect(typeof tip.icon).toBe('string');
     expect(typeof tip.title).toBe('string');
     expect(typeof tip.text).toBe('string');
+  });
+});
+
+describe('getContextualTip time and season mocking', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('should return evening tip for evening hours', () => {
+    vi.useFakeTimers();
+    // 18:00 (6 PM) in August (month 7, 0-indexed) to avoid summer/winter tip overlap
+    vi.setSystemTime(new Date(2026, 7, 20, 18, 0, 0));
+    const tip = getContextualTip();
+    expect(tip.title).toBe('Evening Energy');
+  });
+
+  it('should return winter tip in winter months', () => {
+    vi.useFakeTimers();
+    // 14:00 (2 PM) in December (month 11, 0-indexed) to avoid time-based tip overlap
+    vi.setSystemTime(new Date(2026, 11, 20, 14, 0, 0));
+    const tip = getContextualTip();
+    expect(tip.title).toBe('Winter Tip');
   });
 });

@@ -3,6 +3,8 @@
  * @module components/common/Card
  */
 
+import PropTypes from 'prop-types';
+
 /**
  * A flexible card container component.
  * @param {Object} props
@@ -31,5 +33,14 @@ function Card({ children, title, icon, className = '', variant = 'default', id }
     </article>
   );
 }
+
+Card.propTypes = {
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  icon: PropTypes.string,
+  className: PropTypes.string,
+  variant: PropTypes.string,
+  id: PropTypes.string,
+};
 
 export default Card;

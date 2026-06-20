@@ -3,6 +3,8 @@
  * @module components/common/Button
  */
 
+import PropTypes from 'prop-types';
+
 /**
  * An accessible button component with loading state and variants.
  * @param {Object} props
@@ -79,5 +81,19 @@ function Button({
     </button>
   );
 }
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  variant: PropTypes.oneOf(['primary', 'secondary', 'outline', 'danger', 'ghost']),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  loading: PropTypes.bool,
+  disabled: PropTypes.bool,
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
+  onClick: PropTypes.func,
+  ariaLabel: PropTypes.string,
+  id: PropTypes.string,
+  className: PropTypes.string,
+  icon: PropTypes.string,
+};
 
 export default Button;

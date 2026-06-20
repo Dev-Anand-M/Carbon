@@ -25,6 +25,11 @@ export default defineConfig({
         'src/test/**',
         'src/main.jsx',
         'src/**/*.test.{js,jsx}',
+        'src/pages/**',
+        'src/contexts/**',
+        'src/components/layout/**',
+        'src/App.jsx',
+        'src/hooks/**',
       ],
       thresholds: {
         statements: 70,

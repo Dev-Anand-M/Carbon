@@ -84,6 +84,26 @@ describe('formatRelativeTime', () => {
     expect(formatRelativeTime(new Date())).toBe('Just now');
   });
 
+  it('should show minutes ago', () => {
+    const minutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    expect(formatRelativeTime(minutesAgo)).toBe('5 minutes ago');
+  });
+
+  it('should show hours ago', () => {
+    const hoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000);
+    expect(formatRelativeTime(hoursAgo)).toBe('3 hours ago');
+  });
+
+  it('should show days ago', () => {
+    const daysAgo = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000);
+    expect(formatRelativeTime(daysAgo)).toBe('4 days ago');
+  });
+
+  it('should show formatted date for old dates', () => {
+    const oldDate = new Date('2024-01-01');
+    expect(formatRelativeTime(oldDate)).toContain('2024');
+  });
+
   it('should handle invalid dates', () => {
     expect(formatRelativeTime('invalid')).toBe('Unknown');
   });

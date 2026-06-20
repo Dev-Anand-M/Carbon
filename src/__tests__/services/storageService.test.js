@@ -11,6 +11,7 @@ import {
   clearAllData,
   getStorageSize,
   exportAllData,
+  importData,
 } from '../../services/storageService.js';
 import { STORAGE_KEYS } from '../../utils/constants.js';
 
@@ -110,6 +111,42 @@ describe('storageService', () => {
       expect(exported.version).toBe(1);
       expect(exported.exportedAt).toBeDefined();
       expect(exported.data.CARBON_DATA).toEqual({ foo: 'bar' });
+    });
+  });
+
+  describe('importData', () => {
+    it('should successfully import valid backup data', () => {
+      const backup = {
+        version: 1,
+        data: {
+          CARBON_DATA: { testImport: true },
+          ACTIVITIES: [1, 2, 3],
+        },
+      };
+      const result = importData(backup);
+      expect(result.success).toBe(true);
+      expect(result.errors).toHaveLength(0);
+
+      expect(getStoredData(STORAGE_KEYS.CARBON_DATA)).toEqual({ testImport: true });
+      expect(getStoredData(STORAGE_KEYS.ACTIVITIES)).toEqual([1, 2, 3]);
+    });
+
+    it('should reject invalid backup formats', () => {
+      expect(importData(null).success).toBe(false);
+      expect(importData({}).success).toBe(false);
+      expect(importData('invalid').success).toBe(false);
+    });
+
+    it('should skip unknown storage keys or null values', () => {
+      const backup = {
+        version: 1,
+        data: {
+          UNKNOWN_KEY: { foo: 'bar' },
+          CARBON_DATA: null,
+        },
+      };
+      const result = importData(backup);
+      expect(result.success).toBe(true);
     });
   });
 });

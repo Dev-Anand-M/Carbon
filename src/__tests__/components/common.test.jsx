@@ -2,12 +2,13 @@
  * @fileoverview Component tests for common UI components.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Button from '../../components/common/Button.jsx';
 import Card from '../../components/common/Card.jsx';
 import ProgressBar from '../../components/common/ProgressBar.jsx';
+import ErrorBoundary from '../../components/common/ErrorBoundary.jsx';
 
 describe('Button', () => {
   it('should render with children', () => {
@@ -111,5 +112,70 @@ describe('ProgressBar', () => {
   it('should hide value when showValue is false', () => {
     render(<ProgressBar value={42} showValue={false} />);
     expect(screen.queryByText('42%')).not.toBeInTheDocument();
+  });
+});
+
+function ErrorThrower({ shouldThrow }) {
+  if (shouldThrow) {
+    throw new Error('Test Error');
+  }
+  return <div>No Error</div>;
+}
+
+describe('ErrorBoundary', () => {
+  it('should render children when no error occurs', () => {
+    render(
+      <ErrorBoundary>
+        <div>Normal Child</div>
+      </ErrorBoundary>
+    );
+    expect(screen.getByText('Normal Child')).toBeInTheDocument();
+  });
+
+  it('should render fallback UI when an error occurs', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    render(
+      <ErrorBoundary>
+        <ErrorThrower shouldThrow={true} />
+      </ErrorBoundary>
+    );
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    spy.mockRestore();
+  });
+
+  it('should render custom fallback component if provided', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    render(
+      <ErrorBoundary fallback={<div>Custom Error UI</div>}>
+        <ErrorThrower shouldThrow={true} />
+      </ErrorBoundary>
+    );
+    expect(screen.getByText('Custom Error UI')).toBeInTheDocument();
+    spy.mockRestore();
+  });
+
+  it('should reset error state when "Try Again" is clicked', async () => {
+    const user = userEvent.setup();
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    
+    let shouldThrow = true;
+    const { rerender } = render(
+      <ErrorBoundary>
+        <ErrorThrower shouldThrow={shouldThrow} />
+      </ErrorBoundary>
+    );
+    
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    
+    shouldThrow = false;
+    rerender(
+      <ErrorBoundary>
+        <ErrorThrower shouldThrow={shouldThrow} />
+      </ErrorBoundary>
+    );
+    
+    await user.click(screen.getByText('Try Again'));
+    expect(screen.getByText('No Error')).toBeInTheDocument();
+    spy.mockRestore();
   });
 });

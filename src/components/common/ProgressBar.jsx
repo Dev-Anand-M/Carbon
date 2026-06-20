@@ -3,6 +3,8 @@
  * @module components/common/ProgressBar
  */
 
+import PropTypes from 'prop-types';
+
 /**
  * An accessible progress bar with label and animated fill.
  * @param {Object} props
@@ -51,5 +53,15 @@ function ProgressBar({
     </div>
   );
 }
+
+ProgressBar.propTypes = {
+  value: PropTypes.number.isRequired,
+  max: PropTypes.number,
+  label: PropTypes.string,
+  ariaLabel: PropTypes.string,
+  variant: PropTypes.string,
+  showValue: PropTypes.bool,
+  id: PropTypes.string,
+};
 
 export default ProgressBar;

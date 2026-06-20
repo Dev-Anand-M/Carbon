@@ -37,7 +37,7 @@ export default [
       /* React rules */
       'react/jsx-uses-react': 'off', /* React 17+ JSX transform */
       'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
+      'react/prop-types': 'error',
       'react/jsx-uses-vars': 'error',
       'react/jsx-no-target-blank': 'error',
 

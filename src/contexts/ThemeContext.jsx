@@ -5,6 +5,7 @@
  */
 
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { getStoredData, setStoredData } from '../services/storageService.js';
 import { STORAGE_KEYS } from '../utils/constants.js';
 
@@ -93,5 +94,9 @@ export function useTheme() {
   }
   return context;
 }
+
+ThemeProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default ThemeContext;

@@ -134,6 +134,16 @@ describe('validateProfile', () => {
     expect(result.valid).toBe(false);
     expect(result.errors.length).toBeGreaterThan(0);
   });
+
+  it('should reject invalid name length', () => {
+    const resultLong = validateProfile({ name: 'a'.repeat(101) });
+    expect(resultLong.valid).toBe(false);
+    expect(resultLong.errors.length).toBeGreaterThan(0);
+
+    const resultShort = validateProfile({ name: '   ' });
+    expect(resultShort.valid).toBe(false);
+    expect(resultShort.errors.length).toBeGreaterThan(0);
+  });
 });
 
 describe('validateActivityEntry', () => {
@@ -181,6 +191,16 @@ describe('validateActivityEntry', () => {
     });
     expect(result.valid).toBe(false);
   });
+
+  it('should reject invalid date format', () => {
+    const result = validateActivityEntry({
+      category: 'transport',
+      type: 'car',
+      date: 'invalid-date-string',
+    });
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain('Invalid date format');
+  });
 });
 
 describe('validateGoal', () => {
@@ -211,6 +231,15 @@ describe('validateGoal', () => {
       deadline: past.toISOString(),
     });
     expect(result.valid).toBe(false);
+  });
+
+  it('should reject invalid deadline format', () => {
+    const result = validateGoal({
+      targetReduction: 20,
+      deadline: 'invalid-date-string',
+    });
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain('Invalid deadline date');
   });
 
   it('should reject null goal', () => {

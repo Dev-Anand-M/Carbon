@@ -16,6 +16,7 @@ import {
   compareToBenchmarks,
   calculateGoalProgress,
   calculateDailyBudget,
+  calculateActionImpact,
 } from '../../utils/carbonCalculations.js';
 
 describe('calculateTransportEmissions', () => {
@@ -269,5 +270,21 @@ describe('calculateDailyBudget', () => {
   it('should apply reduction percentage', () => {
     const result = calculateDailyBudget(3650, 50);
     expect(result).toBe(5); // 3650 * 0.5 / 365
+  });
+});
+
+describe('calculateActionImpact', () => {
+  const mockActions = [
+    { id: 'action_1', impact_kg_per_year: 100 },
+    { id: 'action_2', impact_kg_per_year: 250 },
+  ];
+
+  it('should return correct impact for a found action', () => {
+    expect(calculateActionImpact('action_1', mockActions)).toBe(100);
+    expect(calculateActionImpact('action_2', mockActions)).toBe(250);
+  });
+
+  it('should return 0 for an unknown action', () => {
+    expect(calculateActionImpact('action_3', mockActions)).toBe(0);
   });
 });
