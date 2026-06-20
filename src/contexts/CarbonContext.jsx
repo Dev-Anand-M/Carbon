@@ -136,8 +136,8 @@ export function CarbonProvider({ children }) {
       try {
         footprintResult = calculateTotalFootprint(carbonData);
         hasCalculated = true;
-      } catch {
-        /* Ignore calculation errors from stale data */
+      } catch (calcError) {
+        console.warn('[CarbonContext] Could not recalculate footprint from persisted data:', calcError.message);
       }
     }
 

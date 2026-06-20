@@ -103,7 +103,8 @@ function Tracking() {
           default:
             break;
         }
-      } catch {
+      } catch (calcError) {
+        console.warn('[Tracking] Emission calculation failed:', calcError.message);
         emissions = 0;
       }
 

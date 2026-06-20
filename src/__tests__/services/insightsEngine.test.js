@@ -113,19 +113,103 @@ describe('getContextualTip time and season mocking', () => {
     vi.useRealTimers();
   });
 
+  it('should return morning tip for morning hours', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 7, 20, 7, 0, 0));
+    const tip = getContextualTip();
+    expect(tip.title).toBe('Morning Commute');
+  });
+
+  it('should return lunch tip for midday hours', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 7, 20, 12, 0, 0));
+    const tip = getContextualTip();
+    expect(tip.title).toBe('Lunch Time');
+  });
+
   it('should return evening tip for evening hours', () => {
     vi.useFakeTimers();
-    // 18:00 (6 PM) in August (month 7, 0-indexed) to avoid summer/winter tip overlap
     vi.setSystemTime(new Date(2026, 7, 20, 18, 0, 0));
     const tip = getContextualTip();
     expect(tip.title).toBe('Evening Energy');
   });
 
+  it('should return night tip for late hours', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 7, 20, 21, 0, 0));
+    const tip = getContextualTip();
+    expect(tip.title).toBe('Night Routine');
+  });
+
   it('should return winter tip in winter months', () => {
     vi.useFakeTimers();
-    // 14:00 (2 PM) in December (month 11, 0-indexed) to avoid time-based tip overlap
     vi.setSystemTime(new Date(2026, 11, 20, 14, 0, 0));
     const tip = getContextualTip();
     expect(tip.title).toBe('Winter Tip');
+  });
+
+  it('should return summer tip in summer months', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 4, 20, 14, 0, 0));
+    const tip = getContextualTip();
+    expect(tip.title).toBe('Summer Tip');
+  });
+
+  it('should return default tip when no time/season match', () => {
+    vi.useFakeTimers();
+    /* 3 AM in September — no time or season tips match */
+    vi.setSystemTime(new Date(2026, 8, 20, 3, 0, 0));
+    const tip = getContextualTip();
+    expect(tip.title).toBe('Daily Tip');
+  });
+});
+
+describe('generateInsights summary levels', () => {
+  it('should return "excellent" for very low footprint', () => {
+    /* Minimal data → total below sustainable_target (2.0 tonnes) */
+    const lowData = {
+      transport: {},
+      energy: {},
+      diet: 'vegan',
+      shopping: {},
+      waste: {},
+    };
+    const result = generateInsights(lowData, []);
+    expect(result.summary.level).toBe('excellent');
+    expect(result.summary.emoji).toBe('🌟');
+  });
+
+  it('should return "high" for above-world-average footprint', () => {
+    /* High emissions across all categories */
+    const highData = {
+      transport: {
+        car_gasoline: { distance: 200, frequency: 1, isWeekly: true },
+      },
+      energy: { electricity: 1000, natural_gas: 500 },
+      diet: 'heavy_meat',
+      shopping: { clothing: 10, electronics: 5 },
+      waste: { general: 20 },
+    };
+    const result = generateInsights(highData, []);
+    expect(result.summary.level).toBe('high');
+    expect(result.summary.emoji).toBe('⚠️');
+  });
+
+  it('should handle all actions completed', () => {
+    const sampleData = {
+      transport: { car_gasoline: { distance: 30, frequency: 1, isWeekly: true } },
+      energy: { electricity: 300 },
+      diet: 'medium_meat',
+      shopping: { clothing: 2 },
+      waste: { general: 5 },
+    };
+    const allActionIds = [
+      'switch_led', 'public_transport', 'reduce_meat', 'carpool',
+      'cold_wash', 'plant_based_day', 'unplug_devices', 'recycle',
+      'composting', 'solar_panels', 'reduce_flights', 'reusable_bags',
+    ];
+    const result = generateInsights(sampleData, allActionIds);
+    expect(result.recommendations).toHaveLength(0);
+    expect(result.potentialSavings).toBe(0);
   });
 });

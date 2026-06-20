@@ -14,8 +14,8 @@ import Card from '../components/common/Card.jsx';
 import Button from '../components/common/Button.jsx';
 import ProgressBar from '../components/common/ProgressBar.jsx';
 import { CATEGORIES, CHART_COLORS, BENCHMARKS } from '../utils/constants.js';
-import { formatEmissions, formatNumber } from '../utils/formatters.js';
-import { getEquivalencies, calculateGoalProgress } from '../utils/carbonCalculations.js';
+import { formatEmissions, formatNumber, formatPercentage } from '../utils/formatters.js';
+import { getEquivalencies, compareToBenchmarks, calculateGoalProgress } from '../utils/carbonCalculations.js';
 import { Link } from 'react-router-dom';
 
 /**
@@ -59,6 +59,12 @@ function Dashboard() {
       { name: 'Paris Target', value: BENCHMARKS.paris_target, fill: '#10b981' },
       { name: 'USA Avg', value: BENCHMARKS.usa_average, fill: '#ef4444' },
     ];
+  }, [footprintResult]);
+
+  /* Detailed benchmark analysis */
+  const benchmarkAnalysis = useMemo(() => {
+    if (!footprintResult) return [];
+    return compareToBenchmarks(footprintResult.totalTonnes);
   }, [footprintResult]);
 
   /* Equivalencies */
@@ -198,15 +204,17 @@ function Dashboard() {
                   <tr><th>Category</th><th>Emissions (kg CO₂e)</th><th>Percentage</th></tr>
                 </thead>
                 <tbody>
-                  {pieData.map((item) => (
-                    <tr key={item.name}>
-                      <td>{item.name}</td>
-                      <td>{item.value}</td>
-                      <td>{footprintResult.percentages[
-                        Object.entries(CATEGORIES).find(([, v]) => v.label === item.name)?.[0]
-                      ]}%</td>
-                    </tr>
-                  ))}
+                  {pieData.map((item) => {
+                    const catKey = Object.entries(CATEGORIES).find(([, v]) => v.label === item.name)?.[0];
+                    const pct = footprintResult.percentages[catKey] || 0;
+                    return (
+                      <tr key={item.name}>
+                        <td>{item.name}</td>
+                        <td>{formatEmissions(item.value)}</td>
+                        <td>{formatPercentage(pct)}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -228,6 +236,22 @@ function Dashboard() {
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
+              {/* Accessible benchmark comparison table */}
+              <table className="sr-only" aria-label="Benchmark comparison details">
+                <thead>
+                  <tr><th>Benchmark</th><th>Value (tonnes)</th><th>Your Status</th><th>Difference</th></tr>
+                </thead>
+                <tbody>
+                  {benchmarkAnalysis.map((b) => (
+                    <tr key={b.key}>
+                      <td>{b.label}</td>
+                      <td>{b.value}</td>
+                      <td>{b.status === 'below' ? 'Below' : 'Above'}</td>
+                      <td>{b.difference > 0 ? '+' : ''}{b.difference} tonnes ({b.percentDifference}%)</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </Card>
         </div>

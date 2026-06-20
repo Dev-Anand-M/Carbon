@@ -3,7 +3,7 @@
 > **Understand, Track, and Reduce** your carbon footprint through personalized insights and actionable recommendations.
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#)
-[![Tests](https://img.shields.io/badge/tests-156%20passing-brightgreen)](#)
+[![Tests](https://img.shields.io/badge/tests-197%20passing-brightgreen)](#)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#)
 [![WCAG](https://img.shields.io/badge/WCAG-2.1%20AA-green)](#accessibility)
 
@@ -121,7 +121,7 @@ relevanceScore = categoryWeight × 20  // Higher for user's worst categories
 
 ```
 src/
-├── __tests__/                  # 156 unit & component tests
+├── __tests__/                  # 197 unit & component tests
 │   ├── components/             # UI component tests
 │   ├── services/               # Service layer tests
 │   └── utils/                  # Utility function tests
@@ -222,7 +222,7 @@ src/
 
 ## 🧪 Testing
 
-### Test Suite: **156 tests across 7 test files**
+### Test Suite: **197 tests across 7 test files**
 
 ```bash
 # Run all tests
@@ -235,15 +235,15 @@ npm run test:watch
 npm run test:coverage
 ```
 
-### Test Coverage
+### Test Coverage — 95% Statement Coverage
 
 | Category | Files | Tests | Coverage |
 |----------|-------|-------|----------|
-| **Utils** | 3 | 97 | Calculations, validators, formatters |
-| **Services** | 2 | 26 | Storage service, insights engine |
-| **Components** | 1 | 18 | Button, Card, ProgressBar |
-| **Data Integrity** | 1 | 15 | Constants validation |
-| **Total** | **7** | **156** | **All passing** ✅ |
+| **Utils** | 3 | 106 | Calculations, validators, formatters |
+| **Services** | 2 | 48 | Storage service, insights engine |
+| **Components** | 1 | 22 | Button, Card, ProgressBar, ErrorBoundary |
+| **Data Integrity** | 1 | 21 | Constants validation |
+| **Total** | **7** | **197** | **All passing** ✅ |
 
 ### What's Tested
 
@@ -327,5 +327,3 @@ MIT License — see [LICENSE](LICENSE) for details.
 <p align="center">
   Built with 💚 for the planet
 </p>
-#   C a r b o n  
- 

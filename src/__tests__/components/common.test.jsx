@@ -5,6 +5,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import PropTypes from 'prop-types';
 import Button from '../../components/common/Button.jsx';
 import Card from '../../components/common/Card.jsx';
 import ProgressBar from '../../components/common/ProgressBar.jsx';
@@ -121,6 +122,10 @@ function ErrorThrower({ shouldThrow }) {
   }
   return <div>No Error</div>;
 }
+
+ErrorThrower.propTypes = {
+  shouldThrow: PropTypes.bool.isRequired,
+};
 
 describe('ErrorBoundary', () => {
   it('should render children when no error occurs', () => {

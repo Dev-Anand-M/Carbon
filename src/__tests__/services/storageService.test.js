@@ -149,4 +149,76 @@ describe('storageService', () => {
       expect(result.success).toBe(true);
     });
   });
+
+  describe('edge cases', () => {
+    it('should handle legacy data without version wrapper', () => {
+      /* Legacy data stored directly (no _carbonwise_v wrapper) */
+      localStorage.setItem(STORAGE_KEYS.CARBON_DATA, JSON.stringify({ legacy: true }));
+      const result = getStoredData(STORAGE_KEYS.CARBON_DATA);
+      expect(result).toEqual({ legacy: true });
+    });
+
+    it('should handle versioned data wrapper correctly', () => {
+      const wrapped = { _carbonwise_v: 1, timestamp: Date.now(), data: { versioned: true } };
+      localStorage.setItem(STORAGE_KEYS.CARBON_DATA, JSON.stringify(wrapped));
+      const result = getStoredData(STORAGE_KEYS.CARBON_DATA);
+      expect(result).toEqual({ versioned: true });
+    });
+
+    it('should return true from clearAllData', () => {
+      setStoredData(STORAGE_KEYS.CARBON_DATA, { test: true });
+      const result = clearAllData();
+      expect(result).toBe(true);
+    });
+
+    it('getStorageSize should sum across multiple keys', () => {
+      setStoredData(STORAGE_KEYS.CARBON_DATA, { key1: 'value1' });
+      setStoredData(STORAGE_KEYS.ACTIVITIES, [1, 2, 3, 4, 5]);
+      const size = getStorageSize();
+      expect(size).toBeGreaterThan(50);
+    });
+
+    it('exportAllData should include all storage key names', () => {
+      const exported = exportAllData();
+      const keys = Object.keys(exported.data);
+      expect(keys).toContain('CARBON_DATA');
+      expect(keys).toContain('ACTIVITIES');
+      expect(keys).toContain('GOALS');
+      expect(keys).toContain('ACHIEVEMENTS');
+      expect(keys).toContain('THEME');
+    });
+
+    it('importData should handle backup with all valid keys', () => {
+      const backup = {
+        version: 1,
+        data: {
+          CARBON_DATA: { transport: {}, energy: {} },
+          ACTIVITIES: [],
+          GOALS: { targetReduction: 20 },
+          COMPLETED_ACTIONS: ['switch_led'],
+          ACHIEVEMENTS: ['first_calc'],
+        },
+      };
+      const result = importData(backup);
+      expect(result.success).toBe(true);
+      expect(getStoredData(STORAGE_KEYS.GOALS)).toEqual({ targetReduction: 20 });
+      expect(getStoredData(STORAGE_KEYS.COMPLETED_ACTIONS)).toEqual(['switch_led']);
+    });
+
+    it('removeStoredData should return true for valid keys', () => {
+      setStoredData(STORAGE_KEYS.THEME, 'dark');
+      expect(removeStoredData(STORAGE_KEYS.THEME)).toBe(true);
+      expect(getStoredData(STORAGE_KEYS.THEME)).toBeNull();
+    });
+
+    it('setStoredData should handle empty objects', () => {
+      expect(setStoredData(STORAGE_KEYS.CARBON_DATA, {})).toBe(true);
+      expect(getStoredData(STORAGE_KEYS.CARBON_DATA)).toEqual({});
+    });
+
+    it('setStoredData should handle empty arrays', () => {
+      expect(setStoredData(STORAGE_KEYS.ACTIVITIES, [])).toBe(true);
+      expect(getStoredData(STORAGE_KEYS.ACTIVITIES)).toEqual([]);
+    });
+  });
 });
