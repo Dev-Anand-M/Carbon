@@ -1,0 +1,48 @@
+{
+  "name": "carbonwise",
+  "private": true,
+  "version": "1.0.0",
+  "description": "CarbonWise — A smart platform to understand, track, and reduce your carbon footprint through personalized insights and actionable recommendations.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/",
+    "format": "prettier --write \"src/**/*.{js,jsx,css,json}\""
+  },
+  "dependencies": {
+    "dompurify": "^3.2.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.7.0",
+    "recharts": "^2.15.4"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react": "^4.6.0",
+    "esbuild": "^0.28.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.8.4",
+    "vite": "^8.0.12",
+    "vitest": "^4.1.9"
+  },
+  "keywords": [
+    "carbon-footprint",
+    "sustainability",
+    "environment",
+    "climate-change",
+    "carbon-tracker"
+  ],
+  "license": "MIT"
+}
