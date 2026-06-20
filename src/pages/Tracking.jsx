@@ -16,9 +16,8 @@ import {
   CATEGORIES,
 } from '../utils/constants.js';
 import { calculateTransportEmissions, calculateEnergyEmissions, calculateShoppingEmissions, calculateWasteEmissions } from '../utils/carbonCalculations.js';
-import { formatEmissions, formatRelativeTime, formatStreak, generateId } from '../utils/formatters.js';
+import { formatEmissions, formatRelativeTime, formatStreak } from '../utils/formatters.js';
 import { validateActivityEntry } from '../utils/validators.js';
-import { Link } from 'react-router-dom';
 
 /**
  * Activity type options keyed by category.
@@ -35,7 +34,7 @@ const ACTIVITY_OPTIONS = {
  * @returns {JSX.Element}
  */
 function Tracking() {
-  const { activities, addActivity, removeActivity, streak, hasCalculated } = useCarbon();
+  const { activities, addActivity, removeActivity, streak } = useCarbon();
   const { announce } = useAccessibility();
 
   const [category, setCategory] = useState('transport');

@@ -19,7 +19,6 @@ import {
   WASTE_FACTORS,
   CATEGORIES,
 } from '../utils/constants.js';
-import { validateNumber } from '../utils/validators.js';
 import { formatEmissions } from '../utils/formatters.js';
 
 const STEPS = ['transport', 'energy', 'diet', 'shopping', 'waste'];
@@ -48,7 +47,6 @@ function Calculator() {
     shopping: { ...carbonData.shopping },
     waste: { ...carbonData.waste },
   });
-  const [errors, setErrors] = useState({});
   const [isCalculating, setIsCalculating] = useState(false);
 
   const stepKey = STEPS[currentStep];
@@ -65,12 +63,6 @@ function Calculator() {
         [field]: value,
       },
     }));
-    /* Clear error on change */
-    setErrors((prev) => {
-      const next = { ...prev };
-      delete next[`${category}.${field}`];
-      return next;
-    });
   }, []);
 
   /**

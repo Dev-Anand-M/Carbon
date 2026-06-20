@@ -7,7 +7,7 @@
 
 import { createContext, useContext, useReducer, useCallback, useEffect, useMemo } from 'react';
 import { getStoredData, setStoredData } from '../services/storageService.js';
-import { STORAGE_KEYS, ACHIEVEMENTS, REDUCTION_ACTIONS } from '../utils/constants.js';
+import { STORAGE_KEYS } from '../utils/constants.js';
 import { calculateTotalFootprint } from '../utils/carbonCalculations.js';
 import { generateId } from '../utils/formatters.js';
 

@@ -14,8 +14,8 @@ import Card from '../components/common/Card.jsx';
 import Button from '../components/common/Button.jsx';
 import ProgressBar from '../components/common/ProgressBar.jsx';
 import { CATEGORIES, CHART_COLORS, BENCHMARKS } from '../utils/constants.js';
-import { formatEmissions, formatNumber, formatPercentage } from '../utils/formatters.js';
-import { getEquivalencies, compareToBenchmarks, calculateGoalProgress } from '../utils/carbonCalculations.js';
+import { formatEmissions, formatNumber } from '../utils/formatters.js';
+import { getEquivalencies, calculateGoalProgress } from '../utils/carbonCalculations.js';
 import { Link } from 'react-router-dom';
 
 /**

@@ -125,4 +125,51 @@ describe('Constants Data Integrity', () => {
       });
     });
   });
+
+  describe('SHOPPING_FACTORS', () => {
+    it('should have at least 3 categories', () => {
+      expect(Object.keys(SHOPPING_FACTORS).length).toBeGreaterThanOrEqual(3);
+    });
+
+    it('should have positive factors', () => {
+      Object.values(SHOPPING_FACTORS).forEach((item) => {
+        expect(item.factor).toBeGreaterThan(0);
+        expect(item.unit).toBeTruthy();
+        expect(item.label).toBeTruthy();
+      });
+    });
+  });
+
+  describe('WASTE_FACTORS', () => {
+    it('should have general waste factor higher than recycled or composted', () => {
+      expect(WASTE_FACTORS.general.factor).toBeGreaterThan(WASTE_FACTORS.recycled.factor);
+      expect(WASTE_FACTORS.general.factor).toBeGreaterThan(WASTE_FACTORS.composted.factor);
+    });
+  });
+
+  describe('EQUIVALENCIES', () => {
+    it('should have positive coefficients', () => {
+      Object.values(EQUIVALENCIES).forEach((val) => {
+        expect(val).toBeGreaterThan(0);
+      });
+    });
+  });
+
+  describe('ACHIEVEMENTS', () => {
+    it('should have unique badge IDs', () => {
+      const ids = ACHIEVEMENTS.map((a) => a.id);
+      const uniqueIds = new Set(ids);
+      expect(uniqueIds.size).toBe(ids.length);
+    });
+
+    it('should have all required fields', () => {
+      ACHIEVEMENTS.forEach((badge) => {
+        expect(badge.id).toBeTruthy();
+        expect(badge.title).toBeTruthy();
+        expect(badge.description).toBeTruthy();
+        expect(badge.icon).toBeTruthy();
+        expect(badge.condition).toBeTruthy();
+      });
+    });
+  });
 });

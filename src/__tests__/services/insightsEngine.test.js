@@ -39,7 +39,6 @@ describe('generateInsights', () => {
   });
 
   it('should filter completed actions from recommendations', () => {
-    const result1 = generateInsights(sampleData, []);
     const result2 = generateInsights(sampleData, ['switch_led', 'public_transport']);
     /* Completed actions should not appear in recommendations */
     const recommendedIds = result2.recommendations.map((r) => r.id);

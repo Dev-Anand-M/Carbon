@@ -18,7 +18,7 @@ import { CATEGORIES } from '../utils/constants.js';
  * @returns {JSX.Element}
  */
 function Insights() {
-  const { carbonData, hasCalculated, completedActions, toggleAction, footprintResult } = useCarbon();
+  const { carbonData, hasCalculated, completedActions, toggleAction } = useCarbon();
   const { announce } = useAccessibility();
 
   /* Generate insights */
@@ -74,7 +74,7 @@ function Insights() {
     );
   }
 
-  const { summary, recommendations, sortedCategories, potentialSavingsTonnes, equivalencies } = insights;
+  const { summary, recommendations, sortedCategories, potentialSavingsTonnes } = insights;
 
   return (
     <div className="page page--insights">
